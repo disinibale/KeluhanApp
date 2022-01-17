@@ -1,0 +1,63 @@
+@extends('adminlte::master')
+
+@php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
+
+@if (config('adminlte.use_route_url', false))
+    @php( $dashboard_url = $dashboard_url ? route($dashboard_url) : '' )
+@else
+    @php( $dashboard_url = $dashboard_url ? url($dashboard_url) : '' )
+@endif
+
+@section('adminlte_css')
+    @stack('css')
+    @yield('css')
+@stop
+
+@section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
+
+@section('body')
+    <div class="{{ $auth_type ?? 'login' }}-box">
+
+        {{-- Logo --}}
+        <div class="{{ $auth_type ?? 'login' }}-logo d-flex justify-content-center mb-4">
+            <div>
+                {{-- {!! config('adminlte.logo', '<b>Admin</b>LTE') !!} --}}
+            </div>
+            <a href="{{ $dashboard_url }}">
+                <img src="https://www.telkom.co.id/images/logo_horizontal.svg" height="50">
+            </a>
+        </div>
+
+        {{-- Card Box --}}
+        <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-danger') }}">
+
+            {{-- Card Header --}}
+            @hasSection('auth_header')
+                <div class="card-header py-4 {{ config('adminlte.classes_auth_header', '') }}">
+                    <h3 class="card-title float-none text-center">
+                        @yield('auth_header')
+                    </h3>
+                </div>
+            @endif
+
+            {{-- Card Body --}}
+            <div class="card-body {{ $auth_type ?? 'login' }}-card-body {{ config('adminlte.classes_auth_body', '') }}">
+                @yield('auth_body')
+            </div>
+
+            {{-- Card Footer --}}
+            @hasSection('auth_footer')
+                <div class="card-footer bg-dark {{ config('adminlte.classes_auth_footer', '') }}">
+                    @yield('auth_footer')
+                </div>
+            @endif
+
+        </div>
+
+    </div>
+@stop
+
+@section('adminlte_js')
+    @stack('js')
+    @yield('js')
+@stop
